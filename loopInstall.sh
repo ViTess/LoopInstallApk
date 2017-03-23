@@ -1,5 +1,13 @@
 #!/bin/bash
 
+#############################################################################
+#																			#
+# 安装指定目录下所有apk，可选择安装设备										#
+# ./loopInstall.sh				-> 寻找当前目录下的apk文件					#
+# ./loopInstall.sh ./apkPath	-> 寻找当前目录下的子目录apkPath里的apk文件	#
+#																			#
+#############################################################################
+
 # parameter
 
 TRUE=0
@@ -51,6 +59,7 @@ printApkList(){ #打印当前的apk
 }
 
 findDevices(){ #查找设备
+	adb start-server
 	result=`adb devices`
 	if [ ${result:0:4} != "List" ]; then
 		echo -e "\033[32;1m没有设备\033[0m"
