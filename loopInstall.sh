@@ -55,6 +55,13 @@ findApk(){ #根据路径寻找目录下所有的apk
       done
 }
 
+printTiming(){  
+    start=$1  
+    end=$2  
+    
+    awk 'BEGIN{time='$end'-'$start';printf "用时 %.3fs\n", time}'
+}
+
 printApkList(){ #打印当前的apk
     if [ ${#mApkList[*]} -ne 0 ]; then
         printRed ${mApkList[*]##*/}
@@ -149,18 +156,21 @@ chooseDevices(){ #选择设备
 }
 
 install(){ #安装apk
-    #date
+    startTime=`date "+%s.%N"`
     for device in $@
     do
     {
         for apkPath in ${mApkList[*]}
         do
+        {
             adb -s $device install -r -d $apkPath
+        } #&
         done
     } &
     done
     wait
-    #date
+    endTime=`date "+%s.%N"`
+    printTiming $startTime $endTime
 }
 
 run(){ #执行
